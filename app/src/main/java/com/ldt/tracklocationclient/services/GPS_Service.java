@@ -118,7 +118,7 @@ public class GPS_Service extends Service {
 
         long newTime = System.currentTimeMillis();
         Log.d(TAG, "onLocationChanged: " + (newTime - time));
-        if (newTime - time < 60 * 1000) return false;
+        if (newTime - time < 30 * 1000) return false;
         double d = Math.abs(location.getLatitude() - lastLocation.getLatitude()) + Math.abs(location.getLongitude() - lastLocation.getLongitude());
         if (d < 0.00001) {
             Log.d(TAG, "checkCondition d: " + d);

@@ -45,7 +45,7 @@
             <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
             <!-- </intent-filter> -->
         </activity>
-        <activity android:name=".activities.LoginActivity">
+        <activity android:name=".activities.LoginActivity" android:label="Client" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -57,7 +57,7 @@
             android:name=".services.GPS_Service"
             android:exported="false"></service>
 
-        <activity android:name=".activities.Main2Activity">
+        <activity android:name=".activities.Main2Activity" android:label="Server">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

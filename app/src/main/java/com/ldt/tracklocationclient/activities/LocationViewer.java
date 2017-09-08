@@ -31,11 +31,13 @@ public class LocationViewer extends AppCompatActivity implements OnMapReadyCallb
 
     private static final String TAG = LocationViewer.class.getSimpleName();
     private GoogleMap googleMap;
+    String userId = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_location_viewer);
+        userId = getIntent().getStringExtra(getResources().getString(R.string.userId));
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -54,23 +56,26 @@ public class LocationViewer extends AppCompatActivity implements OnMapReadyCallb
     private void getLocations(){
 
         UserController<List<UserLocationEntity>> controller = new UserController<>();
-        controller.getUserLocation("tuanld", new IResponse<List<UserLocationEntity>>() {
+        controller.getUserLocation(userId, new IResponse<List<UserLocationEntity>>() {
             @Override
             public void onResponse(ResponseEntity<List<UserLocationEntity>> response) {
                 List<UserLocationEntity> results = response.getData();
-                if(results!=null){
+                if(results!=null ){
                     Log.d(TAG, "onResponse: " + results.size());
+                    if(results.size()==0) return;
                     for (UserLocationEntity entity: results) {
                         LatLng sydney = new LatLng(entity.getLatitude(), entity.getLongitude());
                         googleMap.addMarker(new MarkerOptions().position(sydney)
-                                .title(entity.getUserId() + " " + entity.getTime()));
+                                .title(" " + entity.getTime()));
                     }
                     UserLocationEntity loc = results.get(0);
                     googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(loc.getLatitude(), loc.getLongitude()), 12.0f));
 
                 }
+                else    {
+                    Log.d(TAG, "onResponse: null");
+                }
             }
-
             @Override
             public void onFailure(Throwable t) {
                 Log.e(TAG, "onFailure: "  + t.getMessage() );

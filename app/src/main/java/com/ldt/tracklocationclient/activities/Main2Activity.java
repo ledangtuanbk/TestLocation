@@ -1,10 +1,13 @@
 package com.ldt.tracklocationclient.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
@@ -22,6 +25,7 @@ import butterknife.ButterKnife;
 
 public class Main2Activity extends AppCompatActivity {
 
+    private static final String TAG = Main2Activity.class.getSimpleName();
     @BindView(R.id.rvUser)
     RecyclerView rvUser;
     private RecyclerView.Adapter mAdapter;
@@ -48,12 +52,14 @@ public class Main2Activity extends AppCompatActivity {
         controller.getAllUsers(new IResponse<List<TestUserEntity>>() {
             @Override
             public void onResponse(ResponseEntity<List<TestUserEntity>> response) {
+                Log.d(TAG, "onResponse: ");
                 if(response!=null){
+                    Log.d(TAG, "onResponse: " + response.getData().size());
                     for (TestUserEntity user:response.getData()) {
                         datas.add(user.getUserId());
                         mAdapter.notifyDataSetChanged();
                     }
-                }
+                }else Log.d(TAG, "onResponse: null");
             }
 
             @Override
@@ -101,10 +107,21 @@ public class Main2Activity extends AppCompatActivity {
 
         // Replace the contents of a view (invoked by the layout manager)
         @Override
-        public void onBindViewHolder(ViewHolder holder, int position) {
+        public void onBindViewHolder(ViewHolder holder, final int position) {
             // - get element from your dataset at this position
             // - replace the contents of the view with that element
+            if(position%2==0)
+                holder.mTextView.setBackgroundColor(getResources().getColor(R.color.bg));
             holder.mTextView.setText(mDataset.get(position));
+            holder.mTextView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Log.d(TAG, "onClick: " + datas.get(position));
+                    Intent intent = new Intent(Main2Activity.this, LocationViewer.class);
+                    intent.putExtra(getResources().getString(R.string.userId), datas.get(position));
+                    startActivity(intent);
+                }
+            });
 
         }
 

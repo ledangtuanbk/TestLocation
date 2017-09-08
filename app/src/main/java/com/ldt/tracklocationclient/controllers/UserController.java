@@ -96,14 +96,17 @@ public class UserController<T> {
             @Override
             public void onResponse(Call<ResponseEntity<List<UserLocationEntity>>> call, Response<ResponseEntity<List<UserLocationEntity>>> response) {
                 if(response.isSuccessful()){
+                    Log.d(TAG, "onResponse: success");
                     iResponse.onResponse(response.body());
                 }else {
+                    Log.d(TAG, "onResponse: not success");
                     iResponse.onResponse(null);
                 }
             }
 
             @Override
             public void onFailure(Call<ResponseEntity<List<UserLocationEntity>>> call, Throwable t) {
+                Log.e(TAG, "onFailure: " + t.getMessage());
                 iResponse.onFailure(t);
             }
         });
@@ -116,14 +119,17 @@ public class UserController<T> {
             @Override
             public void onResponse(Call<ResponseEntity<List<TestUserEntity>>> call, Response<ResponseEntity<List<TestUserEntity>>> response) {
                 if(response.isSuccessful()){
+                    Log.d(TAG, "onResponse: success");
                     iResponse.onResponse(response.body());
                 }else {
+                    Log.d(TAG, "onResponse: " + response.message());
                     iResponse.onResponse(null);
                 }
             }
 
             @Override
             public void onFailure(Call<ResponseEntity<List<TestUserEntity>>> call, Throwable t) {
+                Log.d(TAG, "onFailure: " + t.getMessage());
                 iResponse.onFailure(t);
             }
         });

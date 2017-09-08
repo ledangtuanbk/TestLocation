@@ -26,6 +26,7 @@ public interface UserService {
     @PUT("Test/loginOrRegister/{userId}")
     Call<ResponseEntity<TestUserEntity>> loginOrRegister(@Path("userId") String userId);
 
-    @PUT("Test/Users")
+    @GET("Test/Users")
     Call<ResponseEntity<List<TestUserEntity>>> getAllUsers();
 }
+
