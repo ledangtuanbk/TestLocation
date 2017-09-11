@@ -70,7 +70,7 @@ public class ClientActivity extends AppCompatActivity {
 
             // Should we show an explanation?
             if (ActivityCompat.shouldShowRequestPermissionRationale(this,
-                    Manifest.permission.ACCESS_COARSE_LOCATION)) {
+                    Manifest.permission.ACCESS_FINE_LOCATION)) {
                 Log.d(TAG, "requestPermissions: Should we show an explanation");
 
                 // Show an explanation to the user *asynchronously* -- don't block
@@ -82,7 +82,7 @@ public class ClientActivity extends AppCompatActivity {
                 // No explanation needed, we can request the permission.
                 Log.d(TAG, "requestPermissions");
                 ActivityCompat.requestPermissions(this,
-                        new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
+                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                         MY_PERMISSIONS_LOCATION);
                 // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
                 // app-defined int constant. The callback method gets the

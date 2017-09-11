@@ -1,13 +1,17 @@
 package com.ldt.tracklocationclient.activities;
 
-import android.app.IntentService;
+import android.Manifest;
 import android.content.BroadcastReceiver;
-import android.content.ComponentName;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.os.Handler;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -19,7 +23,9 @@ import com.ldt.tracklocationclient.controllers.UserController;
 import com.ldt.tracklocationclient.entities.ResponseEntity;
 import com.ldt.tracklocationclient.entities.TestUserEntity;
 import com.ldt.tracklocationclient.interfaces.IResponse;
+import com.ldt.tracklocationclient.interfaces.InternetResult;
 import com.ldt.tracklocationclient.services.GPS_Service;
+import com.ldt.tracklocationclient.utilities.AppLog;
 import com.ldt.tracklocationclient.utilities.SharedPrefUtils;
 import com.ldt.tracklocationclient.utilities.Utils;
 
@@ -42,10 +48,18 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
-        boolean hasInternet = Utils.checkInternet(this);
-        if (!hasInternet) {
 
-        }
+        Utils.checkInternet(new InternetResult() {
+            @Override
+            public void result(boolean hasInternet) {
+                Log.d(TAG, "result: " + hasInternet);
+                if (!hasInternet) {
+                    processNoInternet();
+                }else {
+                    checkPermissions();
+                }
+            }
+        });
     }
 
     @Override
@@ -83,7 +97,7 @@ public class LoginActivity extends AppCompatActivity {
         controller.loginOrRegister(userId, new IResponse<TestUserEntity>() {
             @Override
             public void onResponse(ResponseEntity<TestUserEntity> response) {
-                if(response==null){
+                if (response == null) {
                     return;
                 }
                 TestUserEntity data = response.getData();
@@ -113,13 +127,87 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-    private void hideApp() {
-        Intent testIntent = new Intent();
-        testIntent.setAction(CUSTOM_INTENT);
-        this.sendBroadcast(testIntent);
-        PackageManager p = getPackageManager();
-        ComponentName componentName = new ComponentName(this, LoginActivity.class);
-        p.setComponentEnabledSetting(componentName, PackageManager.COMPONENT_ENABLED_STATE_DISABLED, PackageManager.DONT_KILL_APP);
+
+    /**
+     * Show dialog when don't have internet connection
+     */
+    private void processNoInternet() {
+        AppLog.d(TAG, "processNoInternet: ");
+        new AlertDialog.Builder(this).setTitle(R.string.information)
+                .setMessage(R.string.no_internet)
+                .setPositiveButton(R.string.close, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        android.os.Process.killProcess(android.os.Process.myPid());
+                        System.exit(1);
+                    }
+                })
+                .show();
     }
 
+
+    private void checkPermissions() {
+        Log.d(TAG, "checkPermissions: ");
+
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                    Manifest.permission.ACCESS_FINE_LOCATION)) {
+                Log.d(TAG, "checkPermissions: Should we show an explanation");
+                new AlertDialog.Builder(this).setTitle(R.string.information)
+                        .setMessage("May khong the chay ung dung neu nhu khong cho phep permission nay, cho phep?")
+                        .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                Log.d(TAG, "onClick: ");
+                                requestPermissions();
+                            }
+                        })
+                        .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+
+                            }
+                        })
+                        .show();
+            } else {
+                Log.d(TAG, "checkPermissions: requestPermissions");
+                requestPermissions();
+            }
+        }
+    }
+
+    private void requestPermissions() {
+        ActivityCompat.requestPermissions(this,
+                new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                MY_PERMISSIONS_LOCATION);
+    }
+
+    final int MY_PERMISSIONS_LOCATION = 1;
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case MY_PERMISSIONS_LOCATION: {
+                Log.d(TAG, "onRequestPermissionsResult: " + grantResults.length);
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Log.d(TAG, "onRequestPermissionsResult: " + grantResults.length);
+                    // permission was granted, yay! Do the
+                    // contacts-related task you need to do.
+
+                } else {
+                    Log.d(TAG, "onRequestPermissionsResult: " + grantResults.length);
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                }
+                return;
+            }
+
+            // other 'case' lines to check for other
+            // permissions this app might request
+        }
+    }
 }

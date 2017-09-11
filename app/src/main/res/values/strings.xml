@@ -19,4 +19,58 @@
         completions."
     </string>
     <string name="userId">userId</string>
+
+
+    <string name="navigation_drawer_open">Open</string>
+    <string name="navigation_drawer_close">Close</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="youtubeMovie">"Videos in this application is hosted by YouTube.Com and available in public channel. This application is just only summarry these Videos.
+    However, Some movies may be inadvertently violate copyright. So if you know that the videos or movies are infringe copyright of any media companies, we would like to receive all of your reports to the email: androidvn1989@gmail.com"</string>
+    <string name="information">Information</string>
+    <string name="no_internet">Sorry, no internet connectivity detected. Please reconnect and try again.</string>
+    <string name="ok">Ok</string>
+    <string name="close">Close</string>
+    <string name="loading">Loading...</string>
+    <string name="end_data">Loaded all data.</string>
+    <string name="disclainmer">DISCLAIMER</string>
+    <string name="action_search">search</string>
+    <string name="url_youtube">http://img.youtube.com/vi/%0/default.jpg</string>
+    <string name="url_store">https://play.google.com/store/apps/details?id=com.ldt.video3d</string>
+
+    <string name="search_hint">search</string>
+    <string name="facebook_app_id">355469601471919</string>
+    <string name="app_url">https://play.google.com/store/apps/details?id=com.ldt.video3d</string>
+    <string name="app_des">The largest VR Video database</string>
+    <string name="operation">Action</string>
+    <string name="menu_share">Share</string>
+    <string name="add_video">Add Video</string>
+    <string name="menu_send">Send</string>
+    <string name="menu_support">Support</string>
+    <string name="menu_feedback">Feedback</string>
+    <string name="menu_about">About</string>
+    <string name="your_name">Your name</string>
+    <string name="your_email">your_email</string>
+    <string name="video_url">Video Link</string>
+    <string name="action_send">Send</string>
+    <string name="action_close">Close</string>
+    <string name="send_email_fail">Fail to send email</string>
+    <string name="email_author">androidvn1989@gmail.com</string>
+    <string name="subject_add_video">Add Video</string>
+    <string name="name">Name</string>
+    <string name="send_to">Send to</string>
+    <string name="intro">Watch more interesting video at</string>
+    <string name="dialog_about">This Application is created by AndroidVN Team.\nIf you need more information contact us:  androidvn1989@gmail.com</string>
+    <string name="your_feedback">Your feedback</string>
+    <string name="feedback">Feedback</string>
+    <string name="add_favourite">Add to Favourite</string>
+    <string name="share">Share</string>
+    <string name="send">Send</string>
+    <string name="remove_from_favourite">Remove from favourite</string>
+    <string name="intro_video">Checkout this video:</string>
+    <string name="error_player">There was an error initializing the YouTubePlayer (%1$s)</string>
+    <string name="title_send_email_admin">Contribute exciting video to our community</string>
+    <string name="send_firebase">send firebase</string>
+    <string name="delete_firebase">Delete in Firebase</string>
+    <string name="cancel">Cancel</string>
 </resources>
