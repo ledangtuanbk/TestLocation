@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnMapClickListener;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -71,8 +72,11 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         String sensor = "sensor=false";
 
         // Building the parameters to the web service
-        String parameters = str_origin + "&" + str_dest + "&" + sensor;
+        String parameters = str_origin + "&" + str_dest + "&" + sensor ;
 
+        parameters += "&waypoints=via:20.9897858,105.7893306";
+        parameters += "|via:20.9893667,105.789172";
+        parameters += "&key=AIzaSyA1dsxB7wWpIQybWe7cT7VEXw7_pyD9SyE";
         // Output format
         String output = "json";
 
@@ -174,8 +178,11 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
                     // Checks, whether start and end locations are captured
                     if (markerPoints.size() >= 2) {
-                        LatLng origin = markerPoints.get(0);
-                        LatLng dest = markerPoints.get(1);
+//                        LatLng origin = markerPoints.get(0);
+//                        LatLng dest = markerPoints.get(1);
+
+                        LatLng origin = new LatLng(20.9904877, 105.7886081);
+                        LatLng dest = new LatLng(20.9910511, 105.7893216);
 
                         // Getting URL to the Google Directions API
                         String url = getDirectionsUrl(origin, dest);
@@ -189,7 +196,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
                 }
             });
-        }else {
+        } else {
             Log.d(TAG, "onMapReady: map is null");
         }
     }
@@ -285,9 +292,10 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 lineOptions.color(Color.RED);
 
             }
-            if(lineOptions!=null)
-            // Drawing polyline in the Google Map for the i-th route
-            map.addPolyline(lineOptions);
+            if (lineOptions != null)
+                // Drawing polyline in the Google Map for the i-th route
+                map.addPolyline(lineOptions);
+            map.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(20.9897858,105.7893306), 16.0f));
         }
     }
 
