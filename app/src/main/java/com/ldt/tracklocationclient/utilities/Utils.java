@@ -2,12 +2,15 @@ package com.ldt.tracklocationclient.utilities;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.text.format.DateFormat;
 import android.util.Log;
 
 import com.ldt.tracklocationclient.interfaces.InternetResult;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.Calendar;
+import java.util.Date;
 
 /**
  * Created by ldt on 1/22/17.
@@ -57,4 +60,8 @@ public class Utils {
         }
 
     }
+
+
+
+
 }

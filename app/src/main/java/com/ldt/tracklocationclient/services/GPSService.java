@@ -4,10 +4,11 @@ package com.ldt.tracklocationclient.services;
  * Created by ldt on 9/8/2017.
  */
 
-import android.app.NotificationManager;
+import android.Manifest;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -16,10 +17,8 @@ import android.os.IBinder;
 import android.provider.Settings;
 import android.support.annotation.Nullable;
 
-import android.support.v4.app.NotificationCompat;
-import android.support.v4.math.MathUtils;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.ldt.tracklocationclient.R;
 import com.ldt.tracklocationclient.controllers.UserController;
@@ -27,14 +26,13 @@ import com.ldt.tracklocationclient.entities.ResponseEntity;
 import com.ldt.tracklocationclient.entities.UserLocationEntity;
 import com.ldt.tracklocationclient.interfaces.IResponse;
 import com.ldt.tracklocationclient.utilities.SharedPrefUtils;
-import com.ldt.tracklocationclient.utilities.Utils;
 
 /**
  * Created by filipp on 6/16/2016.
  */
-public class GPS_Service extends Service {
+public class GPSService extends Service {
 
-    private static final String TAG = GPS_Service.class.getSimpleName();
+    private static final String TAG = GPSService.class.getSimpleName();
     private LocationListener listener;
     private LocationManager locationManager;
 
@@ -54,10 +52,6 @@ public class GPS_Service extends Service {
             @Override
             public void onLocationChanged(Location location) {
                 Log.d(TAG, "onLocationChanged: ");
-                if (!checkCondition(location)) {
-                    Log.d(TAG, "onLocationChanged: not valid");
-                    return;
-                }
                 time = System.currentTimeMillis();
                 lastLocation = location;
                 UserLocationEntity userLocationEntity = new UserLocationEntity();
@@ -89,17 +83,17 @@ public class GPS_Service extends Service {
 
             @Override
             public void onStatusChanged(String s, int i, Bundle bundle) {
-
+                Log.d(TAG, "onStatusChanged() called with: s = [" + s + "], i = [" + i + "], bundle = [" + bundle + "]");
             }
 
             @Override
             public void onProviderEnabled(String s) {
-
+                Log.d(TAG, "onProviderEnabled() called with: s = [" + s + "]");
             }
 
             @Override
             public void onProviderDisabled(String s) {
-                Log.d(TAG, "onProviderDisabled: ");
+                Log.d(TAG, "onProviderDisabled() called with: s = [" + s + "]");
                 Intent i = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
                 i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(i);
@@ -107,9 +101,12 @@ public class GPS_Service extends Service {
         };
 
         locationManager = (LocationManager) getApplicationContext().getSystemService(Context.LOCATION_SERVICE);
-
-        //noinspection MissingPermission
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 3000, 0, listener);
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_FINE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED) {
+            Log.d(TAG, "onCreate: register ");
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 30000, 5, listener);
+        }
 
     }
 
@@ -126,20 +123,6 @@ public class GPS_Service extends Service {
         }
 
         return true;
-    }
-
-    private void showNotify() {
-        NotificationCompat.Builder mBuilder =
-                new NotificationCompat.Builder(this)
-                        .setSmallIcon(R.drawable.ic_notifications_black_24dp)
-                        .setContentTitle("My notification")
-                        .setContentText("Hello World!");
-        int mNotificationId = 001;
-// Gets an instance of the NotificationManager service
-        NotificationManager mNotifyMgr =
-                (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-// Builds the notification and issues it.
-        mNotifyMgr.notify(mNotificationId, mBuilder.build());
     }
 
     @Override

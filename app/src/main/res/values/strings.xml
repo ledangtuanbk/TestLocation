@@ -73,4 +73,6 @@
     <string name="send_firebase">send firebase</string>
     <string name="delete_firebase">Delete in Firebase</string>
     <string name="cancel">Cancel</string>
+    <string name="startTime">startTime</string>
+    <string name="endTime">endTime</string>
 </resources>

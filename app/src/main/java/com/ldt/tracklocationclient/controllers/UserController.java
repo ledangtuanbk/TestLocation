@@ -89,9 +89,9 @@ public class UserController<T> {
         });
     }
 
-    public void getUserLocation(String userId, final IResponse<List<UserLocationEntity>> iResponse){
+    public void getUserLocation(String userId,long start, long end,  final IResponse<List<UserLocationEntity>> iResponse){
         init();
-        Call<ResponseEntity<List<UserLocationEntity>>> call = service.getUserLocation(userId);
+        Call<ResponseEntity<List<UserLocationEntity>>> call = service.getUserLocation(userId, start, end);
         call.enqueue(new Callback<ResponseEntity<List<UserLocationEntity>>>() {
             @Override
             public void onResponse(Call<ResponseEntity<List<UserLocationEntity>>> call, Response<ResponseEntity<List<UserLocationEntity>>> response) {

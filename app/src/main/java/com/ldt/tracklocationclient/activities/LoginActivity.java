@@ -24,7 +24,7 @@ import com.ldt.tracklocationclient.entities.ResponseEntity;
 import com.ldt.tracklocationclient.entities.TestUserEntity;
 import com.ldt.tracklocationclient.interfaces.IResponse;
 import com.ldt.tracklocationclient.interfaces.InternetResult;
-import com.ldt.tracklocationclient.services.GPS_Service;
+import com.ldt.tracklocationclient.services.GPSService;
 import com.ldt.tracklocationclient.utilities.AppLog;
 import com.ldt.tracklocationclient.utilities.SharedPrefUtils;
 import com.ldt.tracklocationclient.utilities.Utils;
@@ -48,7 +48,7 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
-
+        etUserId.setText(SharedPrefUtils.loadString(this,getString(R.string.userId), ""));
         Utils.checkInternet(new InternetResult() {
             @Override
             public void result(boolean hasInternet) {
@@ -109,7 +109,7 @@ public class LoginActivity extends AppCompatActivity {
                         public void run() {
                             Log.d(TAG, "run: start service");
                             SharedPrefUtils.saveString(getApplicationContext(), getString(R.string.userId), etUserId.getText().toString());
-                            Intent i = new Intent(getApplicationContext(), GPS_Service.class);
+                            Intent i = new Intent(getApplicationContext(), GPSService.class);
                             startService(i);
                             LoginActivity.this.finish();
                             System.exit(0);
@@ -144,7 +144,6 @@ public class LoginActivity extends AppCompatActivity {
                 })
                 .show();
     }
-
 
     private void checkPermissions() {
         Log.d(TAG, "checkPermissions: ");
