@@ -110,7 +110,7 @@ public class LocationViewer extends AppCompatActivity implements OnMapReadyCallb
 //                            googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(loc.getLatitude(), loc.getLongitude()), 12.0f));
 
                             String url = getDirectionsUrl(results);
-                            Log.d(TAG, "onMapClick: " + url);
+
 
                             LocationViewer.DownloadTask downloadTask = new LocationViewer.DownloadTask();
 
@@ -147,12 +147,13 @@ public class LocationViewer extends AppCompatActivity implements OnMapReadyCallb
         // Building the parameters to the web service
         String parameters = str_origin + "&" + str_dest + "&" + sensor;
 
-
+        // waypoints is smaller than 23 point
+        int step = positions.size()/20 + 1;
         if (positions.size() >= 3) {
             UserLocationEntity firstPoint = positions.get(1);
             parameters += "&waypoints=via:" + firstPoint.getLatitude() + "," + firstPoint.getLongitude();
         }
-        for (int i = 2; i < positions.size() - 1; i++) {
+        for (int i = 2; i < positions.size() - 1; i+=step) {
             UserLocationEntity temp = positions.get(i);
             parameters += "|via:" + temp.getLatitude() + "," + temp.getLongitude();
         }

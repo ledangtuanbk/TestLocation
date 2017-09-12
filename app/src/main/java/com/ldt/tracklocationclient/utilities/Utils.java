@@ -5,6 +5,7 @@ import android.os.AsyncTask;
 import android.text.format.DateFormat;
 import android.util.Log;
 
+import com.google.gson.Gson;
 import com.ldt.tracklocationclient.interfaces.InternetResult;
 
 import java.net.InetAddress;
@@ -59,6 +60,10 @@ public class Utils {
 
         }
 
+    }
+
+    public  static String toStringJson(Object obj){
+        return new Gson().toJson(obj);
     }
 
 
